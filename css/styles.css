@@ -1,0 +1,21 @@
+.parent {
+  padding: 2rem 2rem;
+  text-align: center;
+}
+
+.hor {
+  display: inline-block;
+  vertical-align: top;
+}
+
+.ver {
+  margin: 10px 0;
+}
+
+.mark {
+  background-color: #e6e6e6;
+  padding: 2px 5px;
+  border-radius: 3px;
+  font-family: 'Courier New', monospace;
+  font-size: small;
+}
