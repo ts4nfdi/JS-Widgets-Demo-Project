@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Using ts4nfdiWidgets Module</title>
+    <!-- Tailwind CSS CDN for basic styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom styles for the Inter font */
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        /* Basic styling for the container where the module will render */
+        .module-output-container {
+            min-height: 100px; /* Give it some initial height */
+            background-color: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 0.75rem; /* rounded-xl */
+            padding: 1.5rem; /* p-6 */
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); /* shadow-xl */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: #6b7280; /* text-gray-500 */
+        }
+    </style>
+</head>
+<body class="bg-gray-50 flex flex-col items-center justify-center min-h-screen p-6">
+
+<h1 class="text-4xl font-extrabold text-gray-900 mb-8 rounded-xl p-4 bg-gradient-to-r from-green-400 to-blue-500 text-white shadow-lg">
+    Testing ts4nfdiWidgets in Plain HTML
+</h1>
+
+<div class="w-full max-w-2xl bg-white p-8 rounded-2xl shadow-xl border border-gray-200">
+    <p class="text-gray-700 mb-6 text-lg">
+        This page demonstrates how to integrate and use your <code>ts4nfdiWidgets</code> module
+        in a standard HTML file, leveraging the IIFE (Immediately Invoked Function Expression) format.
+        The module's <code>createTitle</code> function will render content into the area below.
+    </p>
+
+    <div id="test" class="module-output-container">
+        <!-- Your module's content will be rendered here by createTitle -->
+        <p>Loading module content...</p>
+    </div>
+    <div id="autocomplete" class="module-output-container">
+        <p>Loading module content...</p>
+    </div>
+</div>
+
+<!--
+    Load your module's IIFE bundle.
+    Ensure this URL points to where your Vite-built index.iife.js is served.
+    For local testing, a simple HTTP server (like `http-server` npm package)
+    can serve your 'dist' or 'js' folder.
+
+    <script src="http://localhost:53660/index.iife.js"></script>
+-->
+
+
+<!--
+    Or load your local module's IIFE bundle.
+-->
+<script src="./js/index.iife.js"></script>
+
+<!--
+    Or load the remote module's IIFE file.
+-->
+<!--<script src="https://cdn.jsdelivr.net/npm/@ts4nfdi/terminology-service-suite@1.0.15/dist/index.iife.js"></script>-->
+
+
+<script type="text/javascript">
+    // This script will execute after index.iife.js has loaded.
+    // The ts4nfdiWidgets object should now be available globally.
+
+    // Log the window object to verify ts4nfdiWidgets is present (optional)
+    console.log("Window object after module load:", window);
+    console.log("ts4nfdiWidgets object:", window.ts4nfdiWidgets);
+
+    // Get the target element for rendering
+    const targetElement = document.getElementById('test');
+
+    // Check if the ts4nfdiWidgets object and createTitle function exist
+    if (typeof ts4nfdiWidgets !== 'undefined' && typeof ts4nfdiWidgets.createTitle === 'function') {
+        // Call the createTitle function from your module
+        ts4nfdiWidgets.createTitle(
+            {
+                iri: "http://purl.obolibrary.org/obo/NCIT_C2985",
+                api: "https://semanticlookup.zbmed.de/api/"
+            },
+            targetElement
+        );
+        console.log("createTitle function called successfully.");
+    } else {
+        // Display an error if the module or function is not found
+        console.error("Error: ts4nfdiWidgets module or createTitle function not found.");
+        if (targetElement) {
+            targetElement.innerHTML = '<p class="text-red-500 font-bold">Error: Module not loaded or createTitle function missing. Check console for details.</p>';
+        }
+    }
+</script>
+
+
+<script type="text/javascript">
+    console.log("Window object after module load:", window);
+    console.log("ts4nfdiWidgets object:", window.ts4nfdiWidgets);
+
+    const autocomplete = document.getElementById('autocomplete');
+
+    if (typeof ts4nfdiWidgets !== 'undefined' && typeof ts4nfdiWidgets.createAutocomplete === 'function') {
+        ts4nfdiWidgets.createAutocomplete(
+            {
+                api: "https://semanticlookup.zbmed.de/api/",
+                selectionChangedEvent:((props) => {
+                    console.log("autocomplete")
+                }),
+                allowCustomTerms:true,
+                singleSelection: true,
+
+            },
+            autocomplete
+        );
+        console.log("createAutocomplete function called successfully.");
+    } else {
+        // Display an error if the module or function is not found
+        console.error("Error: ts4nfdiWidgets module or createAutocomplete function not found.");
+        if (autocomplete) {
+            autocomplete.innerHTML = '<p class="text-red-500 font-bold">Error: Module not loaded or createAutocomplete function missing. Check console for details.</p>';
+        }
+    }
+</script>
+
+</body>
+</html>
